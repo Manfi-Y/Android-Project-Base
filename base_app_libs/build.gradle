@@ -1,0 +1,68 @@
+apply plugin: 'com.android.library'
+apply plugin: 'android-apt'
+def AAVersion = '4.1.0'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+    publishNonDefault true
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 6
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled false
+            debuggable false
+        }
+        debug {
+            zipAlignEnabled false
+            debuggable true
+        }
+    }
+
+    publishNonDefault true
+    defaultPublishConfig "debug"
+}
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // HTTP网络请求库（基于HTTPClient）
+    compile 'com.loopj.android:android-async-http:1.4.9'
+    // JSON解析工具
+    compile 'com.alibaba:fastjson:1.2.7'
+    /*
+    第三方Dialog
+    com.android.support:support-v13
+    compile 'com.android.support:appcompat-v7
+    compile 'com.android.support:recyclerview-v7
+    compile 'com.android.support:support-annotations
+    compile 'me.zhanghai.android.materialprogressbar:library
+     */
+    compile 'com.afollestad.material-dialogs:core:0.9.4.2'
+    // 加载更多Adapter
+    compile 'com.othershe:BaseAdapter:1.0.4'
+    // 依赖注入框
+    apt "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0]?.processResources?.manifestFile
+        resourcePackageName 'cn.tianqu.libs.app'
+        library "true"
+        // if you have multiple outputs (when using splits), you may want to have other index than 0
+
+        // you should set your package name here if you are using different application IDs
+        // resourcePackageName "your.package.name"
+
+        // You can set optional annotation processing options here, like these commented options:
+        // logLevel 'INFO'
+        // logFile '/var/log/aa.log'
+    }
+}
