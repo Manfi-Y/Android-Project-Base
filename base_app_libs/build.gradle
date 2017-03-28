@@ -5,8 +5,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 def AAVersion = '4.1.0'
 
-// compile '[group]:base_app_libs:[version]'
-group = 'cn.manfi'    // 上传时候会用'group'这个值作为组名
+group = 'com.github.Manfi-Y'    // 这个group只能用"com.github.用户名"这样命名
 
 android {
     compileSdkVersion 25
@@ -18,6 +17,13 @@ android {
         targetSdkVersion 25
         versionCode 9
         versionName '1.0.2.1'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 
     lintOptions {
