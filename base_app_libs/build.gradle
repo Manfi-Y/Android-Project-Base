@@ -10,20 +10,35 @@ group = 'com.github.Manfi-Y'    // 这个group只能用"com.github.用户名"这
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
+    publishNonDefault true
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 10
-        versionName '1.0.2.2'
+        versionCode 11
+        versionName '1.0.2.3'
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled false
+            debuggable false
+        }
+        debug {
+            zipAlignEnabled false
+            debuggable true
         }
     }
+
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    publishNonDefault true
+    defaultPublishConfig "debug"
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
