@@ -4,7 +4,10 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 def AAVersion = '4.1.0'
-version = '1.0'
+
+// compile '[group]:base_app_libs:[version]'
+version = '1.0.1' // 上传时候bintray会用'version'这个值作为版本号
+group = 'cn.manfi'    // 上传时候bintray会用'group'这个值作为组名
 
 android {
     compileSdkVersion 25
@@ -77,7 +80,7 @@ apt {
 
 def siteUrl = 'https://git.oschina.net/manfi/Android-Project-Base'    // 项目主页
 def gitUrl = 'https://git.oschina.net/manfi/Android-Project-Base.git' // 项目的git地址
-def module_name = 'Android-Project-Base'	// 项目的名称
+def module_name = 'Android-Project-Base'    // 项目的名称
 
 install {
     repositories.mavenInstaller {
@@ -95,8 +98,8 @@ install {
                 }
                 developers {
                     developer {
-                        id 'manfi'	// 账号
-                        name 'manfi'	// 名称
+                        id 'manfi'    // 账号
+                        name 'manfi'    // 名称
                         email 'manfi.yeung@gmail.com' // 邮箱地址
                     }
                 }
@@ -134,7 +137,7 @@ bintray {
     key = properties.getProperty("bintray.apikey")
     configurations = ['archives']
     pkg {
-        repo = "Maven"		// 你在bintray上创建的库的名称
+        repo = "Maven"        // 你在bintray上创建的库的名称
         name = module_name               // 在jcenter中的项目名称
         websiteUrl = siteUrl
         vcsUrl = gitUrl
