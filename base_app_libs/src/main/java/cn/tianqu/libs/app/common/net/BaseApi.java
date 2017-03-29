@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
+import com.loopj.android.http.RangeFileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -245,7 +246,7 @@ public class BaseApi {
     }
 
     public Task download(Context context, String url, File downloadPath, final SimpleDownloadCallback callback) {
-        final RequestHandle rh = MyAsyncHttpClient.get(context, url, null, null, new FileAsyncHttpResponseHandler(downloadPath) {
+        final RequestHandle rh = MyAsyncHttpClient.get(context, url, null, null, new FileAsyncHttpResponseHandler(downloadPath, true) {
 
             @Override
             public void onStart() {
