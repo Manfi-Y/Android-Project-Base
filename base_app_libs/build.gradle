@@ -15,9 +15,11 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 11
-        versionName '1.0.2.3'
+        versionCode 12
+        versionName '1.0.2.4'
     }
+
+    publishNonDefault true
 
     buildTypes {
         release {
@@ -36,9 +38,6 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
-
-    publishNonDefault true
-    defaultPublishConfig "debug"
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
