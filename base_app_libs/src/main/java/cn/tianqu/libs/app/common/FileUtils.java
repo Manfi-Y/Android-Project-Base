@@ -187,4 +187,20 @@ public class FileUtils {
         }
         return deleteCount;
     }
+
+    /**
+     * 删除文件或文件夹（文件夹需要先删除其下面的所有文件后文件夹才能删除自己）
+     *
+     * @param fileOrDirectory ~
+     */
+    public static void deleteRecursive(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+
+        fileOrDirectory.delete();
+    }
 }

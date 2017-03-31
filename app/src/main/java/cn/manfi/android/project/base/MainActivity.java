@@ -1,6 +1,5 @@
 package cn.manfi.android.project.base;
 
-import android.os.Environment;
 import android.widget.Button;
 
 import org.androidannotations.annotations.Click;
@@ -9,9 +8,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.io.File;
 
-import cn.tianqu.libs.app.common.net.BaseApi;
+import cn.tianqu.libs.app.common.FileUtils;
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
-import cn.tianqu.libs.app.common.net.SimpleDownloadCallback;
 import cn.tianqu.libs.app.ui.BaseActivity;
 
 @EActivity(R.layout.activity_main)
@@ -39,12 +37,6 @@ public class MainActivity extends BaseActivity {
 
     @Click(R.id.btn_Test)
     void clickTest() {
-        BaseApi api = new BaseApi();
-        api.download(activity, "http://update4.8684.cn/db/guangzhou_20170329152210.data", new File(Environment.getExternalStorageDirectory().getAbsolutePath()), new SimpleDownloadCallback<Object>(null, null) {
-            @Override
-            public void onSuccess(Object o, File file) {
-
-            }
-        });
+        FileUtils.deleteRecursive(new File(FileUtils.getSDCardPath() + "8684Metro/data", "guangzhou_20170330163457"));
     }
 }
