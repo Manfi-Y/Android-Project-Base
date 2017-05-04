@@ -37,7 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
     protected boolean DEBUG = true;
     protected final String TAG = getClass().getSimpleName();
 
-    private static final int PERMANENTLY_DENIED_REQUEST_CODE = 428;
+    protected static final int PERMANENTLY_DENIED_REQUEST_CODE = 428;
 
     protected Activity activity;
     private BaseUI baseUI;
