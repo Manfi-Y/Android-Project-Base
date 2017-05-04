@@ -15,8 +15,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 15
-        versionName '1.0.2.7'
+        versionCode 16
+        versionName '1.1.0'
     }
 
     publishNonDefault true
@@ -47,10 +47,10 @@ dependencies {
     /*
     第三方Dialog
     com.android.support:support-v13
-    compile 'com.android.support:appcompat-v7
-    compile 'com.android.support:recyclerview-v7
-    compile 'com.android.support:support-annotations
-    compile 'me.zhanghai.android.materialprogressbar:library
+    com.android.support:appcompat-v7
+    com.android.support:recyclerview-v7
+    com.android.support:support-annotations
+    me.zhanghai.android.materialprogressbar:library
      */
     compile 'com.afollestad.material-dialogs:core:0.9.4.2'
     // 加载更多Adapter

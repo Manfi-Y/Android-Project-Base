@@ -1,7 +1,13 @@
 package cn.tianqu.libs.app.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.PermissionGroupInfo;
+import android.content.pm.PermissionInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +70,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("BaseActivity.onActivityResult:" + requestCode);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionUtils.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
@@ -75,17 +87,34 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
     }
 
     @Override
-    public void onPermissionDenied(int requestCode, List<String> perms) {
+    public void onPermissionDenied(final int requestCode, final List<String> perms) {
         LogUtil.d(DEBUG, TAG, perms.size() + " permissions denied.");
-        // 用户勾选了“不在询问”后，或者申请的权限APP不是必须
+        // 用户勾选了“不在询问”后，要求去系统开启权限
         if (PermissionUtils.somePermissionsPermanentlyDenied(this, perms)) {
-            PermissionUtils.onPermissionsPermanentlyDenied(this,
-                    getString(R.string.rationale),
-                    getString(R.string.rationale_title),
-                    getString(android.R.string.ok),
-                    getString(android.R.string.cancel),
-                    PERMANENTLY_DENIED_REQUEST_CODE);
+            try {
+                PermissionInfo permissionInfo = getPackageManager().getPermissionInfo(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.GET_META_DATA);
+                PermissionGroupInfo permissionGroupInfo = getPackageManager().getPermissionGroupInfo(permissionInfo.group, PackageManager.GET_META_DATA);
+                String permissionName = (String) permissionGroupInfo.loadLabel(getPackageManager());
+                PermissionUtils.onPermissionsPermanentlyDenied(this,
+                        "需要在系统权限设置打开\"" + permissionName + "\"权限",
+                        getString(R.string.rationale_title),
+                        getString(android.R.string.ok),
+                        getString(android.R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                onPermissionNotAllow(requestCode, perms);
+                            }
+                        },
+                        PERMANENTLY_DENIED_REQUEST_CODE);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    @Override
+    public void onPermissionNotAllow(int requestCode, List<String> perms) {
     }
 
     /**

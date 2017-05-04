@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
@@ -39,7 +40,6 @@ public class PermissionUtils {
         void onPermissionGranted(int requestCode, List<String> perms);
 
         void onPermissionDenied(int requestCode, List<String> perms);
-
     }
 
     public static boolean hasPermissions(Context context, String... perms) {
@@ -299,11 +299,12 @@ public class PermissionUtils {
                                                       @NonNull String title,
                                                       @NonNull String positiveButton,
                                                       @NonNull String negativeButton,
+                                                      @Nullable DialogInterface.OnClickListener negativeListener,
                                                       int requestCode) {
         new AppSettingsDialog.Builder(activity, rationale)
                 .setTitle(title)
                 .setPositiveButton(positiveButton)
-                .setNegativeButton(negativeButton, null)
+                .setNegativeButton(negativeButton, negativeListener)
                 .setRequestCode(requestCode)
                 .build()
                 .show();
@@ -314,11 +315,12 @@ public class PermissionUtils {
                                                       @NonNull String title,
                                                       @NonNull String positiveButton,
                                                       @NonNull String negativeButton,
+                                                      @Nullable DialogInterface.OnClickListener negativeListener,
                                                       int requestCode) {
         new AppSettingsDialog.Builder(fragment, rationale)
                 .setTitle(title)
                 .setPositiveButton(positiveButton)
-                .setNegativeButton(negativeButton, null)
+                .setNegativeButton(negativeButton, negativeListener)
                 .setRequestCode(requestCode)
                 .build()
                 .show();
@@ -329,11 +331,12 @@ public class PermissionUtils {
                                                       @NonNull String title,
                                                       @NonNull String positiveButton,
                                                       @NonNull String negativeButton,
+                                                      @Nullable DialogInterface.OnClickListener negativeListener,
                                                       int requestCode) {
         new AppSettingsDialog.Builder(fragment, rationale)
                 .setTitle(title)
                 .setPositiveButton(positiveButton)
-                .setNegativeButton(negativeButton, null)
+                .setNegativeButton(negativeButton, negativeListener)
                 .setRequestCode(requestCode)
                 .build()
                 .show();
