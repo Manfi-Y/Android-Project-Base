@@ -50,5 +50,11 @@ public void onPermissionDenied(int requestCode, List<String> perms) {
 @Override
 public void onPermissionNotAllow(int requestCode, List<String> perms) {
     super.onPermissionNotAllow(requestCode, perms);
-    finish();
+    switch (requestCode) {
+        case PERMISSION_REQUEST_TEST:
+            if (!PermissionUtils.somePermissionsPermanentlyDenied(this, perms)) {
+                finish();
+            }
+            break;
+    }
 }
