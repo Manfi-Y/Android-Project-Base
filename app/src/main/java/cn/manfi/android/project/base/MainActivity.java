@@ -89,9 +89,7 @@ public class MainActivity extends BaseActivity {
         super.onPermissionNotAllow(requestCode, perms);
         switch (requestCode) {
             case PERMISSION_REQUEST_TEST:
-                if (!PermissionUtils.somePermissionsPermanentlyDenied(this, perms)) {
-                    finish();
-                }
+                finish();
                 break;
         }
     }

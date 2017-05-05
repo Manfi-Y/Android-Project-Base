@@ -52,9 +52,7 @@ public void onPermissionNotAllow(int requestCode, List<String> perms) {
     super.onPermissionNotAllow(requestCode, perms);
     switch (requestCode) {
         case PERMISSION_REQUEST_TEST:
-            if (!PermissionUtils.somePermissionsPermanentlyDenied(this, perms)) {
-                finish();
-            }
+            finish();
             break;
     }
 }
