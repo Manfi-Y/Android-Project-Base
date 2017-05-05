@@ -1,13 +1,9 @@
 package cn.tianqu.libs.app.ui;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.PermissionGroupInfo;
-import android.content.pm.PermissionInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +18,6 @@ import org.androidannotations.annotations.UiThread;
 import java.util.List;
 
 import cn.tianqu.libs.app.BaseApp;
-import cn.tianqu.libs.app.R;
 import cn.tianqu.libs.app.common.log.LogUtil;
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
 import cn.tianqu.libs.app.common.permission.PermissionUtils;
@@ -91,13 +86,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
         LogUtil.d(DEBUG, TAG, perms.size() + " permissions denied.");
         // 用户勾选了“不在询问”后，要求去系统开启权限
         if (PermissionUtils.somePermissionsPermanentlyDenied(this, perms)) {
-            try {
-                PermissionInfo permissionInfo = getPackageManager().getPermissionInfo(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.GET_META_DATA);
-                PermissionGroupInfo permissionGroupInfo = getPackageManager().getPermissionGroupInfo(permissionInfo.group, PackageManager.GET_META_DATA);
-                String permissionName = (String) permissionGroupInfo.loadLabel(getPackageManager());
+            List<String> needGrantPermissionGroupName = PermissionUtils.loadPermissionsGroupName(getApplicationContext(), perms);
+            if (needGrantPermissionGroupName != null && !needGrantPermissionGroupName.isEmpty()) {
                 PermissionUtils.onPermissionsPermanentlyDenied(this,
-                        "需要在系统权限设置打开\"" + permissionName + "\"权限",
-                        getString(R.string.rationale_title),
+                        PermissionUtils.toPermisionsGroupString(needGrantPermissionGroupName),
+                        "需要在系统权限设置授予以下权限",
                         getString(android.R.string.ok),
                         getString(android.R.string.cancel),
                         new DialogInterface.OnClickListener() {
@@ -106,9 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
                                 onPermissionNotAllow(requestCode, perms);
                             }
                         },
-                        PERMANENTLY_DENIED_REQUEST_CODE);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
+                        requestCode);
             }
         }
     }

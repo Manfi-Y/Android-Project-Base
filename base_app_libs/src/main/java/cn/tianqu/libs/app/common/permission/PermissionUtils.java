@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionGroupInfo;
+import android.content.pm.PermissionInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,19 +44,19 @@ public class PermissionUtils {
         void onPermissionDenied(int requestCode, List<String> perms);
     }
 
-    public static boolean hasPermissions(Context context, String... perms) {
+    public static String[] hasPermissions(Context context, String... perms) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
+            return null;
         }
 
+        List<String> notGrantPermList = new ArrayList<>(perms.length);
         for (String perm : perms) {
             boolean hasPerm = (ContextCompat.checkSelfPermission(context, perm) == PackageManager.PERMISSION_GRANTED);
             if (!hasPerm) {
-                return false;
+                notGrantPermList.add(perm);
             }
         }
-
-        return true;
+        return notGrantPermList.size() == 0 ? null : notGrantPermList.toArray(new String[]{});
     }
 
     public static void requestPermissions(final Object object, String rationale, final int requestCode, final String... perms) {
@@ -342,6 +344,49 @@ public class PermissionUtils {
                 .show();
     }
 
+    /**
+     * 找出权限所属组别名称
+     * <p>
+     * 实际上到系统-应用-权限下打开对应的权限显示的是组名。
+     * </p>
+     *
+     * @param context ~
+     * @param perms   ~
+     * @return ~
+     */
+    public static List<String> loadPermissionsGroupName(@NonNull Context context, @NonNull List<String> perms) {
+
+        if (perms.isEmpty()) {
+            return null;
+        }
+        List<String> permsGroupName = new ArrayList<>(perms.size());
+        try {
+            for (String perm : perms) {
+                PermissionInfo permissionInfo = context.getPackageManager().getPermissionInfo(perm, PackageManager.GET_META_DATA);
+                PermissionGroupInfo permissionGroupInfo = context.getPackageManager().getPermissionGroupInfo(permissionInfo.group, PackageManager.GET_META_DATA);
+                String permissionName = (String) permissionGroupInfo.loadLabel(context.getPackageManager());
+                if (!permsGroupName.contains(permissionName)) {
+                    permsGroupName.add(permissionName);
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return permsGroupName;
+    }
+
+    /**
+     * 输出所需字符串
+     *
+     * @param perms ~
+     * @return xx、xx、xx、xx
+     */
+    public static String toPermisionsGroupString(List<String> perms) {
+        if (perms != null && !perms.isEmpty()) {
+            return perms.toString().replace("[", "").replace("]", "");
+        }
+        return "";
+    }
 
     private static void checkCallingObjectSuitability(Object object) {
         if (object == null) {

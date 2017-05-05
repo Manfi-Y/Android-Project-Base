@@ -49,6 +49,7 @@ public class AppSettingsDialog {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", context.getPackageName(), null);
                 intent.setData(uri);
+                intent.putExtra("test", "1");
 
                 startForResult(activityOrFragment, intent, settingsRequestCode);
             }
