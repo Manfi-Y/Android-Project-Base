@@ -50,6 +50,10 @@ public class MyAsyncHttpClient {
         }
     }
 
+    public static AsyncHttpClient getClient() {
+        return client;
+    }
+
     /**
      * POST 请求
      *
