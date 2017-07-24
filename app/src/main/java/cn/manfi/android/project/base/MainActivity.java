@@ -9,8 +9,6 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
-
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
 import cn.tianqu.libs.app.ui.BaseActivity;
 import pl.tajchert.nammu.Nammu;

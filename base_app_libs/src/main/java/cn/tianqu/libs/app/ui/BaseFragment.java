@@ -10,17 +10,14 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 
-import java.util.List;
-
-import cn.tianqu.libs.app.common.log.LogUtil;
-import cn.tianqu.libs.app.common.permission.PermissionUtils;
+import pl.tajchert.nammu.Nammu;
 
 /**
  * Fragment 基础类
  * Created by Manfi
  */
 @EFragment
-public abstract class BaseFragment extends Fragment implements BaseFragmentV, PermissionUtils.PermissionCallbacks {
+public abstract class BaseFragment extends Fragment implements BaseFragmentV {
 
     protected boolean DEBUG = true;
     protected final String TAG = getClass().getSimpleName();
@@ -47,20 +44,7 @@ public abstract class BaseFragment extends Fragment implements BaseFragmentV, Pe
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionUtils.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @Override
-    public void onPermissionGranted(int requestCode, List<String> perms) {
-        LogUtil.d(DEBUG, TAG, perms.size() + " permissions granted.");
-    }
-
-    @Override
-    public void onPermissionDenied(int requestCode, List<String> perms) {
-        LogUtil.e(DEBUG, TAG, perms.size() + " permissions denied.");
-
-        //此处不处理"不在询问"的状态，如果处理了会导致弹出两个Dialog
-        //统一在BaseActivity中做处理
+        Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**
