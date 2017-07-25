@@ -31,7 +31,6 @@ public class BaseApp extends Application {
         super.onCreate();
 
         PrefUtil.init(this);
-        Nammu.init(this);
         activityList.clear();
     }
 

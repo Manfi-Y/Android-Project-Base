@@ -2,7 +2,6 @@ package cn.tianqu.libs.app.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +13,12 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.tianqu.libs.app.BaseApp;
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
+import cn.tianqu.libs.app.common.permission.PermissionUtilTool;
 import pl.tajchert.nammu.Nammu;
 
 /**
@@ -27,6 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
 
     protected boolean DEBUG = true;
     protected final String TAG = getClass().getSimpleName();
+    protected static final int PERMANENTLY_DENIED_REQUEST_CODE = 428;
 
     protected Activity activity;
     private BaseUI baseUI;
@@ -62,6 +66,33 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    /**
+     * 判断权限是否有被拒绝的
+     *
+     * @param perms ~
+     */
+    protected void isPermissionsPermanentlyDenied(List<String> perms) {
+        List<String> refusedPermission = new ArrayList<>();
+        for (String perm : perms) {
+            if (!Nammu.checkPermission(perm)) {
+                refusedPermission.add(perm);
+            }
+        }
+        // 用户勾选了“不在询问”后，要求去系统开启权限
+        if (PermissionUtilTool.somePermissionsPermanentlyDenied(this, refusedPermission)) {
+            List<String> needGrantPermissionGroupNameList = PermissionUtilTool.loadPermissionsGroupName(getApplicationContext(), refusedPermission);
+            if (needGrantPermissionGroupNameList != null && !needGrantPermissionGroupNameList.isEmpty()) {
+                PermissionUtilTool.onPermissionsPermanentlyDenied(this,
+                        PermissionUtilTool.toPermisionsGroupString(needGrantPermissionGroupNameList),
+                        "需要在系统权限设置授予以下权限",
+                        getString(android.R.string.ok),
+                        getString(android.R.string.cancel),
+                        null,
+                        PERMANENTLY_DENIED_REQUEST_CODE);
+            }
+        }
     }
 
     /**
