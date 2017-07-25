@@ -73,7 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
      *
      * @param perms ~
      */
-    protected void isPermissionsPermanentlyDenied(List<String> perms) {
+    protected boolean isPermissionsPermanentlyDenied(List<String> perms) {
         List<String> refusedPermission = new ArrayList<>();
         for (String perm : perms) {
             if (!Nammu.checkPermission(perm)) {
@@ -92,6 +92,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
                         null,
                         PERMANENTLY_DENIED_REQUEST_CODE);
             }
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -15,8 +15,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 22
-        versionName '1.2.2'
+        versionCode 23
+        versionName '1.2.3'
     }
 
     publishNonDefault true
