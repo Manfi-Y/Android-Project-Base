@@ -29,6 +29,8 @@ public abstract class BaseFragment extends Fragment implements BaseFragmentV {
     protected Activity activity;
     private BaseUI baseUI;
 
+    private String witchOptionNeedPermission = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
