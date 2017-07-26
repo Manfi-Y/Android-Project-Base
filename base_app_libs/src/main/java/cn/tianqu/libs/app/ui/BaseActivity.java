@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
     protected Activity activity;
     private BaseUI baseUI;
 
-    private String witchOptionNeedPermission = null;
+    protected String witchOptionNeedPermission = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
