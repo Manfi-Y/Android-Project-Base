@@ -2,8 +2,8 @@ package cn.tianqu.libs.app.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,8 +18,8 @@ import java.util.List;
 
 import cn.tianqu.libs.app.BaseApp;
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
-import cn.tianqu.libs.app.common.permission.PermissionUtilTool;
-import pl.tajchert.nammu.Nammu;
+import cn.tianqu.libs.app.common.permission.AppSettingsDialog;
+import cn.tianqu.libs.app.common.permission.PermissionUtils;
 
 /**
  * Activity 基础类
@@ -30,7 +30,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
 
     protected boolean DEBUG = true;
     protected final String TAG = getClass().getSimpleName();
-    protected static final int PERMANENTLY_DENIED_REQUEST_CODE = 428;
 
     protected Activity activity;
     private BaseUI baseUI;
@@ -60,42 +59,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
      * 在这里初始化Toolbar
      */
     protected void initToolbar() {
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    /**
-     * 判断权限是否有被拒绝的
-     *
-     * @param perms ~
-     */
-    protected boolean isPermissionsPermanentlyDenied(List<String> perms) {
-        List<String> refusedPermission = new ArrayList<>();
-        for (String perm : perms) {
-            if (!Nammu.checkPermission(perm)) {
-                refusedPermission.add(perm);
-            }
-        }
-        // 用户勾选了“不在询问”后，要求去系统开启权限
-        if (PermissionUtilTool.somePermissionsPermanentlyDenied(this, refusedPermission)) {
-            List<String> needGrantPermissionGroupNameList = PermissionUtilTool.loadPermissionsGroupName(getApplicationContext(), refusedPermission);
-            if (needGrantPermissionGroupNameList != null && !needGrantPermissionGroupNameList.isEmpty()) {
-                PermissionUtilTool.onPermissionsPermanentlyDenied(this,
-                        PermissionUtilTool.toPermisionsGroupString(needGrantPermissionGroupNameList),
-                        "需要在系统权限设置授予以下权限",
-                        getString(android.R.string.ok),
-                        getString(android.R.string.cancel),
-                        null,
-                        PERMANENTLY_DENIED_REQUEST_CODE);
-            }
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -161,5 +124,36 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
 
     @Override
     public void onNetworkChange(boolean isNetworkConnect) {
+    }
+
+    public void askPermanentlyDeniedPermission(String... perms) {
+        final List<String> permanentlyDeniedPerms = new ArrayList<>();
+        for (String perm : perms) {
+            if (!permissions.dispatcher.PermissionUtils.hasSelfPermissions(activity, perm)) {
+                permanentlyDeniedPerms.add(perm);
+            }
+        }
+        if (permanentlyDeniedPerms.size() > 0) {
+            List<String> needGrantPermissionGroupName = PermissionUtils.loadPermissionsGroupName(getApplicationContext(), permanentlyDeniedPerms);
+            if (needGrantPermissionGroupName != null && !needGrantPermissionGroupName.isEmpty()) {
+                PermissionUtils.onPermissionsPermanentlyDenied(this,
+                        PermissionUtils.toPermisionsGroupString(needGrantPermissionGroupName),
+                        "需要在系统权限设置授予以下权限",
+                        getString(android.R.string.ok),
+                        getString(android.R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                permanentlyDeniedPermissionDenied(permanentlyDeniedPerms);
+                            }
+                        },
+                        AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE);
+            }
+        }
+    }
+
+    protected void permanentlyDeniedPermissionDenied(List<String> permanentlyDeniedPerms) {
+
     }
 }

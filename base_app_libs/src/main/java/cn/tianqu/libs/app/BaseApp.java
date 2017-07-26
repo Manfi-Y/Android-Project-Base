@@ -14,7 +14,6 @@ import java.util.List;
 import cn.tianqu.libs.app.common.NetworkUtil;
 import cn.tianqu.libs.app.common.PrefUtil;
 import cn.tianqu.libs.app.ui.BaseActivity;
-import pl.tajchert.nammu.Nammu;
 
 /**
  * Base Application

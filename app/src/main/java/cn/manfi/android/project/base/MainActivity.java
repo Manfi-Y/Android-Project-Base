@@ -1,6 +1,7 @@
 package cn.manfi.android.project.base;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -8,14 +9,19 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.Arrays;
+import java.util.List;
 
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
+import cn.tianqu.libs.app.common.permission.AppSettingsDialog;
 import cn.tianqu.libs.app.ui.BaseActivity;
-import pl.tajchert.nammu.Nammu;
-import pl.tajchert.nammu.PermissionCallback;
-import pl.tajchert.nammu.PermissionListener;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 @EActivity(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
 
@@ -25,7 +31,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Nammu.init(getApplicationContext());
     }
 
     @Override
@@ -41,64 +46,48 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void init() {
-
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
+            MainActivityPermissionsDispatcher.doSomethingWithCheck(this);
+        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Nammu.permissionCompare(new PermissionListener() {
-
-            @Override
-            public void permissionsChanged(String permissionRevoke) {
-                System.out.println("MainActivity.permissionsChanged");
-            }
-
-            @Override
-            public void permissionsGranted(String permissionGranted) {
-                System.out.println("MainActivity.permissionsGranted " + permissionGranted);
-            }
-
-            @Override
-            public void permissionsRemoved(String permissionRemoved) {
-                System.out.println("MainActivity.permissionsRemoved");
-            }
-        });
+    protected void init() {
     }
+
 
     @Click(R.id.btn_Test)
     void clickTest() {
-//        FileUtils.deleteRecursive(new File(FileUtils.getSDCardPath() + "8684Metro/data", "guangzhou_20170330163457"));
-        /*Nammu.askForPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionCallback() {
+        MainActivityPermissionsDispatcher.doSomethingWithCheck(this);
+    }
 
-            @Override
-            public void permissionGranted() {
-                System.out.println("MainActivity.permissionGranted   1");
-            }
+    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    void doSomething() {
+        showToast("授权成功！");
+    }
 
-            @Override
-            public void permissionRefused() {
-                List<String> perms = new ArrayList<>();
-                perms.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                isPermissionsPermanentlyDenied(perms);
-            }
+    @OnPermissionDenied({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    void doSomethingDenied() {
+        System.out.println("MainActivity.doSomethingDenied");
+    }
 
-        });*/
+    @OnShowRationale({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    void doSomethingShowRationale(PermissionRequest request) {
+        System.out.println("MainActivity.doSomethingShowRationale");
+        request.proceed();
+    }
 
-        final String[] checkPermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
-        Nammu.askForPermission(activity, checkPermission, new PermissionCallback() {
+    @OnNeverAskAgain({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    void doSomethingNeverAskPermission() {
+        System.out.println("MainActivity.doSomethingNeverAskPermission");
+        askPermanentlyDeniedPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE);
+    }
 
-            @Override
-            public void permissionGranted() {
-                System.out.println("MainActivity.permissionGranted   1");
-            }
-
-            @Override
-            public void permissionRefused() {
-                isPermissionsPermanentlyDenied(Arrays.asList(checkPermission));
-            }
-
-        });
+    @Override
+    protected void permanentlyDeniedPermissionDenied(List<String> permanentlyDeniedPerms) {
+        super.permanentlyDeniedPermissionDenied(permanentlyDeniedPerms);
+        System.out.println("MainActivity.permanentlyDeniedPermissionDenied");
     }
 }

@@ -7,52 +7,50 @@ com.afollestad.material-dialogs:core
 org.androidannotations:androidannotations-api(需要在引用此库的model再次配置apt才能使用AA)
 
 --- 权限检查功能例子 ---
-先继承BaseActivity然后加入如下代码（获取储存权限）：
+在你的主程序module的build.gradle添加一下依赖
+annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
+annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
+annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
 
-private static final int PERMISSION_REQUEST_TEST = 101;
-private static final String[] TEST_PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
+Activity加入@RuntimePermissions注解
+
+必须实现的注解方法
+@NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+void doSomething() {
+    showToast("授权成功！");
+}
+
+编译一次项目，IDE自动生成这个Activity的专用注解解析代码
+
+实现下面可选注解或方法
+@OnPermissionDenied({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+void doSomethingDenied() {
+    System.out.println("MainActivity.doSomethingDenied");
+}
+
+@OnShowRationale({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+void doSomethingShowRationale(PermissionRequest request) {
+    System.out.println("MainActivity.doSomethingShowRationale");
+    request.proceed();
+}
+
+@OnNeverAskAgain({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+void doSomethingNeverAskPermission() {
+    System.out.println("MainActivity.doSomethingNeverAskPermission");
+    askPermanentlyDeniedPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE);
+}
+
+@Override
+protected void permanentlyDeniedPermissionDenied(List<String> permanentlyDeniedPerms) {
+    super.permanentlyDeniedPermissionDenied(permanentlyDeniedPerms);
+    System.out.println("MainActivity.permanentlyDeniedPermissionDenied");
+}
+
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == PERMISSION_REQUEST_TEST) {
-        String[] perms = TEST_PERMISSIONS;
-        perms = PermissionUtils.hasPermissions(this, perms);
-        if (perms != null) {
-            finish();
-        }
+    if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
     }
 }
 
-@AfterPermissionGranted(PERMISSION_REQUEST_TEST)
-void checkPermission() {
-    String[] perms = TEST_PERMISSIONS;
-    perms = PermissionUtils.hasPermissions(this, perms);
-    if (perms == null) {
-        showToast("授权成功");
-    } else {
-        List<String> permsGroupName = PermissionUtils.loadPermissionsGroupName(getApplicationContext(), Arrays.asList(perms));
-        PermissionUtils.requestPermissions(this, "需要授予\"" + PermissionUtils.toPermisionsGroupString(permsGroupName) + "\"权限。", PERMISSION_REQUEST_TEST, perms);
-    }
-}
-
-@Override
-public void onPermissionDenied(int requestCode, List<String> perms) {
-    super.onPermissionDenied(requestCode, perms);
-    switch (requestCode) {
-        case PERMISSION_REQUEST_TEST:
-            if (!PermissionUtils.somePermissionsPermanentlyDenied(this, perms)) {
-                finish();
-            }
-            break;
-    }
-}
-
-@Override
-public void onPermissionNotAllow(int requestCode, List<String> perms) {
-    super.onPermissionNotAllow(requestCode, perms);
-    switch (requestCode) {
-        case PERMISSION_REQUEST_TEST:
-            finish();
-            break;
-    }
-}
+最后在需要调用[你的Activity]+ PermissionsDispatcher.[方法名]。

@@ -1,9 +1,8 @@
 apply plugin: 'com.android.library'
-apply plugin: 'android-apt'
 // JitPack Maven
 apply plugin: 'com.github.dcendents.android-maven'
 
-def AAVersion = '4.1.0'
+def AAVersion = '4.3.1'
 
 group = 'com.github.Manfi-Y'    // 这个group只能用"com.github.用户名"这样命名
 
@@ -15,8 +14,14 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 23
-        versionName '1.2.3'
+        versionCode 24
+        versionName '1.2.4'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["library": "true"]
+            }
+        }
     }
 
     publishNonDefault true
@@ -56,24 +61,14 @@ dependencies {
     // 加载更多Adapter
     compile 'com.othershe:BaseAdapter:1.0.4'
     // Android权限检测库
-    compile 'com.github.tajchert:nammu:1.1.3'
-    // 依赖注入框
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
-}
-
-apt {
-    arguments {
-        androidManifestFile variant.outputs[0]?.processResources?.manifestFile
-        resourcePackageName 'cn.tianqu.libs.app'
-        library "true"
-        // if you have multiple outputs (when using splits), you may want to have other index than 0
-
-        // you should set your package name here if you are using different application IDs
-        // resourcePackageName "your.package.name"
-
-        // You can set optional annotation processing options here, like these commented options:
-        // logLevel 'INFO'
-        // logFile '/var/log/aa.log'
+    compile("com.github.hotchemi:permissionsdispatcher:2.4.0") {
+        // if you don't use android.app.Fragment you can exclude support for them
+        exclude module: "support-v13"
     }
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
+    // 当permissionsdispatcher和AndroidAnnotation同时使用，需要引入这个
+    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
+    // 依赖注入框架
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
 }

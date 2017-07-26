@@ -1,5 +1,6 @@
 package cn.tianqu.libs.app.common.permission;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,12 +9,11 @@ import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import pl.tajchert.nammu.Nammu;
 
 /**
  * 权限检测辅助工具
@@ -21,20 +21,20 @@ import pl.tajchert.nammu.Nammu;
  * Created by manfi on 2017/7/24.
  */
 
-public class PermissionUtilTool {
+public class PermissionUtils {
 
     /**
      * 是否勾选了 "不再询问"
      *
-     * @param activity          ~
+     * @param object            ~
      * @param deniedPermissions ~
      *
      * @return
      */
-    public static boolean somePermissionsPermanentlyDenied(@NonNull Activity activity,
+    public static boolean somePermissionsPermanentlyDenied(@NonNull Object object,
                                                            @NonNull List<String> deniedPermissions) {
         for (String deniedPermission : deniedPermissions) {
-            if (permissionPermanentlyDenied(activity, deniedPermission)) {
+            if (permissionPermanentlyDenied(object, deniedPermission)) {
                 return true;
             }
         }
@@ -42,35 +42,14 @@ public class PermissionUtilTool {
         return false;
     }
 
+    public static boolean permissionPermanentlyDenied(@NonNull Object object,
+                                                      @NonNull String deniedPermission) {
+        return !shouldShowRequestPermissionRationale(object, deniedPermission);
+    }
+
     /**
-     * 是否勾选了 "不再询问"
-     *
-     * @param fragment          ~
-     * @param deniedPermissions ~
-     *
-     * @return
+     * 权限已经被不再允许
      */
-    public static boolean somePermissionsPermanentlyDenied(@NonNull Fragment fragment,
-                                                           @NonNull List<String> deniedPermissions) {
-        for (String deniedPermission : deniedPermissions) {
-            if (permissionPermanentlyDenied(fragment, deniedPermission)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static boolean permissionPermanentlyDenied(@NonNull Activity activity,
-                                                      @NonNull String deniedPermission) {
-        return !Nammu.shouldShowRequestPermissionRationale(activity, deniedPermission);
-    }
-
-    public static boolean permissionPermanentlyDenied(@NonNull Fragment fragment,
-                                                      @NonNull String deniedPermission) {
-        return !Nammu.shouldShowRequestPermissionRationale(fragment, deniedPermission);
-    }
-
     public static void onPermissionsPermanentlyDenied(@NonNull Activity activity,
                                                       @NonNull String rationale,
                                                       @NonNull String title,
@@ -87,6 +66,9 @@ public class PermissionUtilTool {
                 .show();
     }
 
+    /**
+     * 权限已经被不再允许
+     */
     public static void onPermissionsPermanentlyDenied(@NonNull android.app.Fragment fragment,
                                                       @NonNull String rationale,
                                                       @NonNull String title,
@@ -103,6 +85,9 @@ public class PermissionUtilTool {
                 .show();
     }
 
+    /**
+     * 权限已经被不再允许
+     */
     public static void onPermissionsPermanentlyDenied(@NonNull Fragment fragment,
                                                       @NonNull String rationale,
                                                       @NonNull String title,
@@ -163,5 +148,18 @@ public class PermissionUtilTool {
             e.printStackTrace();
         }
         return permsGroupName;
+    }
+
+    @TargetApi(23)
+    private static boolean shouldShowRequestPermissionRationale(Object object, String perm) {
+        if (object instanceof Activity) {
+            return ActivityCompat.shouldShowRequestPermissionRationale((Activity) object, perm);
+        } else if (object instanceof Fragment) {
+            return ((Fragment) object).shouldShowRequestPermissionRationale(perm);
+        } else if (object instanceof android.app.Fragment) {
+            return ((android.app.Fragment) object).shouldShowRequestPermissionRationale(perm);
+        } else {
+            return false;
+        }
     }
 }

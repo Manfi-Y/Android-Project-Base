@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
-def AAVersion = '4.1.0'
+def AAVersion = '4.3.1'
 
 android {
     compileSdkVersion 25
@@ -35,5 +34,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile project(':base_app_libs')
-    apt "org.androidannotations:androidannotations:$AAVersion"
+    annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
+    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
 }
