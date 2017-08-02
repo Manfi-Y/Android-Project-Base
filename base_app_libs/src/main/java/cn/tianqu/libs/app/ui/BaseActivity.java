@@ -14,6 +14,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.tianqu.libs.app.BaseApp;
@@ -129,14 +130,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
     }
 
     public void askPermanentlyDeniedPermission(String... perms) {
-        final List<String> permanentlyDeniedPerms = new ArrayList<>();
-        for (String perm : perms) {
-            if (!permissions.dispatcher.PermissionUtils.hasSelfPermissions(activity, perm)) {
-                permanentlyDeniedPerms.add(perm);
-            }
+        String[] notGrantPermList = PermissionUtils.hasPermissions(activity, perms);
+        final List<String> permanentlyDeniedPermList = new ArrayList<>();
+        if (notGrantPermList != null) {
+            permanentlyDeniedPermList.addAll(Arrays.asList(notGrantPermList));
         }
-        if (permanentlyDeniedPerms.size() > 0) {
-            List<String> needGrantPermissionGroupName = PermissionUtils.loadPermissionsGroupName(getApplicationContext(), permanentlyDeniedPerms);
+        if (permanentlyDeniedPermList.size() > 0) {
+            List<String> needGrantPermissionGroupName = PermissionUtils.loadPermissionsGroupName(getApplicationContext(), permanentlyDeniedPermList);
             if (needGrantPermissionGroupName != null && !needGrantPermissionGroupName.isEmpty()) {
                 PermissionUtils.onPermissionsPermanentlyDenied(this,
                         PermissionUtils.toPermisionsGroupString(needGrantPermissionGroupName),
@@ -147,7 +147,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseActi
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                permanentlyDeniedPermissionDenied(permanentlyDeniedPerms);
+                                permanentlyDeniedPermissionDenied(permanentlyDeniedPermList);
                             }
                         },
                         AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE);

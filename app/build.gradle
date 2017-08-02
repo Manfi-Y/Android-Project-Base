@@ -34,7 +34,8 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile project(':base_app_libs')
-    annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
-    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
+    provided "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
+    provided "org.androidannotations:androidannotations:$AAVersion"
+    // 当permissionsdispatcher和AndroidAnnotation同时使用，需要引入这个
+    provided 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
 }

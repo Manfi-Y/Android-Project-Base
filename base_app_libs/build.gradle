@@ -14,14 +14,14 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 26
-        versionName '1.2.6'
+        versionCode 27
+        versionName '1.2.7'
 
-        javaCompileOptions {
+        /*javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["library": "true"]
             }
-        }
+        }*/
     }
 
     publishNonDefault true
@@ -66,9 +66,9 @@ dependencies {
         exclude module: "support-v13"
     }
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
-    // 当permissionsdispatcher和AndroidAnnotation同时使用，需要引入这个
-    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
     // 依赖注入框架
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
+    // 当permissionsdispatcher和AndroidAnnotation同时使用，需要引入这个
+    annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
 }

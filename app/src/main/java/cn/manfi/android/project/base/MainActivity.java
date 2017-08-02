@@ -9,11 +9,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
-
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
 import cn.tianqu.libs.app.common.permission.AppSettingsDialog;
-import cn.tianqu.libs.app.ui.BaseActivity;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -21,9 +18,9 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
-@RuntimePermissions
 @EActivity(R.layout.activity_main)
-public class MainActivity extends BaseActivity {
+@RuntimePermissions
+public class MainActivity extends Main2Activity {
 
     @ViewById
     Button btn_Test;
@@ -49,7 +46,7 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
-            MainActivityPermissionsDispatcher.doSomethingWithCheck(this);
+            doSomething();
         }
     }
 
@@ -60,34 +57,31 @@ public class MainActivity extends BaseActivity {
 
     @Click(R.id.btn_Test)
     void clickTest() {
-        MainActivityPermissionsDispatcher.doSomethingWithCheck(this);
+        doSomething();
     }
 
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    @Override
     void doSomething() {
-        showToast("授权成功！");
+        super.doSomething();
     }
 
     @OnPermissionDenied({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    @Override
     void doSomethingDenied() {
-        System.out.println("MainActivity.doSomethingDenied");
+        super.doSomethingDenied();
     }
 
     @OnShowRationale({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    @Override
     void doSomethingShowRationale(PermissionRequest request) {
-        System.out.println("MainActivity.doSomethingShowRationale");
-        request.proceed();
+        super.doSomethingShowRationale(request);
     }
+
 
     @OnNeverAskAgain({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
-    void doSomethingNeverAskPermission() {
-        System.out.println("MainActivity.doSomethingNeverAskPermission");
-        askPermanentlyDeniedPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE);
-    }
-
     @Override
-    protected void permanentlyDeniedPermissionDenied(List<String> permanentlyDeniedPerms) {
-        super.permanentlyDeniedPermissionDenied(permanentlyDeniedPerms);
-        System.out.println("MainActivity.permanentlyDeniedPermissionDenied");
+    void doSomethingNeverAskPermission() {
+        super.doSomethingNeverAskPermission();
     }
 }

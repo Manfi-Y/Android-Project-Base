@@ -8,9 +8,10 @@ org.androidannotations:androidannotations-api(需要在引用此库的model再�
 
 --- 权限检查功能例子 ---
 在你的主程序module的build.gradle添加一下依赖
-annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
-annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
-annotationProcessor 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
+provided "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
+provided "org.androidannotations:androidannotations:$AAVersion"
+// 当permissionsdispatcher和AndroidAnnotation同时使用，需要引入这个
+provided 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.0.0'
 
 Activity加入@RuntimePermissions注解
 
