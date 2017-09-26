@@ -54,4 +54,4 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 }
 
-最后在需要调用[你的Activity]+ PermissionsDispatcher.[方法名]。
+最后直接调用方法。

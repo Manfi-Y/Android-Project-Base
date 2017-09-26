@@ -1,8 +1,5 @@
 package cn.tianqu.libs.app.common.log;
 
-
-import cn.tianqu.libs.app.BuildConfig;
-
 /**
  * Log 配置
  * Created by Manfi on
@@ -10,7 +7,7 @@ import cn.tianqu.libs.app.BuildConfig;
 public class LogConfig {
 
     // Log 开关（打包自动关闭）
-    public static boolean DEBUG = BuildConfig.DEBUG;
+    public static boolean DEBUG = true;
 
     /**
      * 不允许初始化

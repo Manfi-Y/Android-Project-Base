@@ -3,6 +3,7 @@ package cn.manfi.android.project.base;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Button;
 
 import org.androidannotations.annotations.Click;
@@ -12,8 +13,6 @@ import org.androidannotations.annotations.ViewById;
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
 import cn.tianqu.libs.app.common.permission.AppSettingsDialog;
 import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnNeverAskAgain;
-import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
@@ -66,22 +65,22 @@ public class MainActivity extends Main2Activity {
         super.doSomething();
     }
 
-    @OnPermissionDenied({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    /*@OnPermissionDenied({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
     @Override
     void doSomethingDenied() {
         super.doSomethingDenied();
-    }
+    }*/
 
-    @OnShowRationale({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    /*@OnShowRationale({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
     @Override
     void doSomethingShowRationale(PermissionRequest request) {
-        super.doSomethingShowRationale(request);
-    }
+        request.proceed();
+    }*/
 
-
-    @OnNeverAskAgain({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+    /*@OnNeverAskAgain({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
     @Override
     void doSomethingNeverAskPermission() {
         super.doSomethingNeverAskPermission();
-    }
+    }*/
+
 }
