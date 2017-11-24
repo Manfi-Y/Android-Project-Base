@@ -8,7 +8,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.UiThread;
 
 import cn.tianqu.libs.app.common.widget.LoadingDialog;
 
@@ -59,12 +58,14 @@ public class BaseUI implements BaseV {
         loadingDialog = new LoadingDialog(context, msg, progressColorRes, cancelable, cancelOutside, null);
         if (dialogListener != null) {
             loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
                 @Override
                 public void onCancel(DialogInterface dialogInterface) {
                     dialogListener.onCancel(dialogInterface);
                 }
             });
             loadingDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
                     dialogListener.onDismiss(dialogInterface);

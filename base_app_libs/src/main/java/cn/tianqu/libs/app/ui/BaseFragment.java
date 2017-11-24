@@ -1,9 +1,9 @@
 package cn.tianqu.libs.app.ui;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
