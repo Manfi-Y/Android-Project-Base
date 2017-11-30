@@ -3,18 +3,16 @@ package cn.manfi.android.project.base;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.widget.Button;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import cn.tianqu.libs.app.common.UnitUtil;
 import cn.tianqu.libs.app.common.net.MyAsyncHttpClient;
 import cn.tianqu.libs.app.common.permission.AppSettingsDialog;
 import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnShowRationale;
-import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
 @EActivity(R.layout.activity_main)
@@ -56,7 +54,13 @@ public class MainActivity extends Main2Activity {
 
     @Click(R.id.btn_Test)
     void clickTest() {
-        doSomething();
+//        doSomething();
+        showFragmentDialog();
+    }
+
+    private void showFragmentDialog() {
+        MyFragmentDialog myFragmentDialog = new MyFragmentDialog();
+        myFragmentDialog.show(activity, MyFragmentDialog.class.getSimpleName());
     }
 
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})

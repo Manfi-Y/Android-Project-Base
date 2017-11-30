@@ -8,4 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyFragmentDialog" parent="DefaultFragmentDialog">
+        <item name="android:backgroundDimEnabled">false</item><!--activity不变暗-->
+    </style>
 </resources>
