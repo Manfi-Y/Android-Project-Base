@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
-import com.loopj.android.http.RangeFileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -34,6 +33,7 @@ public class BaseApi {
      * @param jsonStr ~
      * @param tClass  ~
      * @param <T>     ~
+     *
      * @return ~
      */
     public static <T> Object parse2Obj(String jsonStr, Class<T> tClass) throws JSONException {
@@ -53,6 +53,7 @@ public class BaseApi {
      * @param jsonStr ~
      * @param tClass  ~
      * @param <T>     ~
+     *
      * @return ~
      */
     public static <T> List<T> parse2List(String jsonStr, Class<T> tClass) throws JSONException {
@@ -106,8 +107,9 @@ public class BaseApi {
         };
     }
 
-    protected Task post(final Context context, final String url, Map<String, String> headerMap, HttpEntity entity, String contentType, final ApiCallback<String> callback) {
-        LogUtil.d(DEBUG, TAG, "接口POST请求开始：" + url + " 参数：" + entity.toString());
+    protected Task post(Context context, String url, Map<String, String> headerMap, HttpEntity entity, String contentType, ApiCallback<String> callback) {
+        String paramsStr = entity != null ? entity.toString() : "无";
+        LogUtil.d(DEBUG, TAG, "接口POST请求开始：" + url + " 参数：" + paramsStr);
         final RequestHandle rh = MyAsyncHttpClient.post(context, url, headerMap, entity, contentType, createResponseHandler(callback));
         return new Task() {
 
@@ -128,8 +130,9 @@ public class BaseApi {
         };
     }
 
-    protected Task post(final Context context, final String url, Map<String, String> headerMap, final RequestParams params, final ApiCallback<String> callback) {
-        LogUtil.d(DEBUG, TAG, "接口POST请求开始：" + url + " 参数：" + params.toString());
+    protected Task post(Context context, String url, Map<String, String> headerMap, RequestParams params, ApiCallback<String> callback) {
+        String paramsStr = params != null ? params.toString() : "无";
+        LogUtil.d(DEBUG, TAG, "接口POST请求开始：" + url + " 参数：" + paramsStr);
         final RequestHandle rh = MyAsyncHttpClient.post(context, url, headerMap, params, createResponseHandler(callback));
         return new Task() {
 
@@ -154,7 +157,7 @@ public class BaseApi {
         return post(context, url, new RequestParams(paramsMap), callback);
     }
 
-    protected Task post(Context context, String url, RequestParams params, final ApiCallback<String> callback) {
+    protected Task post(Context context, String url, RequestParams params, ApiCallback<String> callback) {
         return post(context, url, null, params, callback);
     }
 
@@ -162,8 +165,9 @@ public class BaseApi {
         return post(context, url, headerMap, new RequestParams(paramsMap), callback);
     }
 
-    protected Task delete(final Context context, final String url, Map<String, String> headerMap, HttpEntity entity, String contentType, final ApiCallback<String> callback) {
-        LogUtil.d(DEBUG, TAG, "接口DELETE请求开始：" + url + (entity == null ? "" : " 参数：" + entity.toString()));
+    protected Task delete(Context context, String url, Map<String, String> headerMap, HttpEntity entity, String contentType, ApiCallback<String> callback) {
+        String paramsStr = entity != null ? entity.toString() : "无";
+        LogUtil.d(DEBUG, TAG, "接口DELETE请求开始：" + url + " 参数：" + paramsStr);
         final RequestHandle rh = MyAsyncHttpClient.delete(context, url, headerMap, entity, contentType, createResponseHandler(callback));
         return new Task() {
 
@@ -185,8 +189,9 @@ public class BaseApi {
     }
 
 
-    protected Task get(Context context, final String url, Map<String, String> headerMap, HttpEntity entity, String contentType, final ApiCallback<String> callback) {
-        LogUtil.d(DEBUG, TAG, "接口GET请求开始：" + url + (entity == null ? "" : " 参数：" + entity.toString()));
+    protected Task get(Context context, String url, Map<String, String> headerMap, HttpEntity entity, String contentType, ApiCallback<String> callback) {
+        String paramsStr = entity != null ? entity.toString() : "无";
+        LogUtil.d(DEBUG, TAG, "接口GET请求开始：" + url + " 参数：" + paramsStr);
         final RequestHandle rh = MyAsyncHttpClient.get(context, url, headerMap, entity, contentType, createResponseHandler(callback));
         return new Task() {
 
@@ -207,8 +212,9 @@ public class BaseApi {
         };
     }
 
-    protected Task get(Context context, final String url, Map<String, String> headerMap, final RequestParams params, final ApiCallback<String> callback) {
-        LogUtil.d(DEBUG, TAG, "接口GET请求开始：" + url + (params == null ? "" : " 参数：" + params.toString()));
+    protected Task get(Context context, String url, Map<String, String> headerMap, RequestParams params, ApiCallback<String> callback) {
+        String paramsStr = params != null ? params.toString() : "无";
+        LogUtil.d(DEBUG, TAG, "接口GET请求开始：" + url + " 参数：" + paramsStr);
         final RequestHandle rh = MyAsyncHttpClient.get(context, url, headerMap, params, createResponseHandler(callback));
         return new Task() {
 
@@ -241,11 +247,12 @@ public class BaseApi {
         return get(context, url, headerMap, new RequestParams(paramsMap), callback);
     }
 
-    protected Task get(Context context, String url, RequestParams params, final ApiCallback<String> callback) {
+    protected Task get(Context context, String url, RequestParams params, ApiCallback<String> callback) {
         return get(context, url, null, params, callback);
     }
 
     public Task download(Context context, String url, File downloadPath, final SimpleDownloadCallback callback) {
+        LogUtil.d(DEBUG, TAG, "下载开始：" + url);
         final RequestHandle rh = MyAsyncHttpClient.get(context, url, null, null, new FileAsyncHttpResponseHandler(downloadPath, true) {
 
             @Override

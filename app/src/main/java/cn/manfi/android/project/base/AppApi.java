@@ -2,8 +2,7 @@ package cn.manfi.android.project.base;
 
 import android.content.Context;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.loopj.android.http.RequestParams;
 
 import cn.tianqu.libs.app.common.net.BaseApi;
 import cn.tianqu.libs.app.common.net.SimpleApiCallback;
@@ -30,8 +29,8 @@ public class AppApi extends BaseApi {
     }
 
     public Task test1(Context context, SimpleApiCallback<String> callback) {
-        Map<String, String> params = new HashMap<>();
-        params.put("appver", "1");
-        return get(context, "https://update2.8684.cn/checkupdate2.php", params, callback);
+//        Map<String, String> params = new HashMap<>();
+//        params.put("appver", "1");
+        return post(context, "https://update2.8684.cn/checkupdate2.php", (RequestParams) null, callback);
     }
 }
