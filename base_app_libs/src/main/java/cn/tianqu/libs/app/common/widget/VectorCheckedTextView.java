@@ -43,22 +43,22 @@ public class VectorCheckedTextView extends AppCompatCheckedTextView {
 
     private void initAttrs(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VectorCompatTextView);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VectorCheckedTextView);
 
             Drawable dl = null;
             Drawable dt = null;
             Drawable dr = null;
             Drawable db = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                dl = a.getDrawable(R.styleable.VectorCompatTextView_drawableLeftCompat);
-                dt = a.getDrawable(R.styleable.VectorCompatTextView_drawableTopCompat);
-                dr = a.getDrawable(R.styleable.VectorCompatTextView_drawableRightCompat);
-                db = a.getDrawable(R.styleable.VectorCompatTextView_drawableBottomCompat);
+                dl = a.getDrawable(R.styleable.VectorCheckedTextView_drawableLeftCompat);
+                dt = a.getDrawable(R.styleable.VectorCheckedTextView_drawableTopCompat);
+                dr = a.getDrawable(R.styleable.VectorCheckedTextView_drawableRightCompat);
+                db = a.getDrawable(R.styleable.VectorCheckedTextView_drawableBottomCompat);
             } else {
-                int dlId = a.getResourceId(R.styleable.VectorCompatTextView_drawableLeftCompat, -1);
-                int dtId = a.getResourceId(R.styleable.VectorCompatTextView_drawableTopCompat, -1);
-                int drId = a.getResourceId(R.styleable.VectorCompatTextView_drawableRightCompat, -1);
-                int dbId = a.getResourceId(R.styleable.VectorCompatTextView_drawableBottomCompat, -1);
+                int dlId = a.getResourceId(R.styleable.VectorCheckedTextView_drawableLeftCompat, -1);
+                int dtId = a.getResourceId(R.styleable.VectorCheckedTextView_drawableTopCompat, -1);
+                int drId = a.getResourceId(R.styleable.VectorCheckedTextView_drawableRightCompat, -1);
+                int dbId = a.getResourceId(R.styleable.VectorCheckedTextView_drawableBottomCompat, -1);
 
                 if (dlId != -1)
                     dl = AppCompatResources.getDrawable(context, dlId);
@@ -70,12 +70,12 @@ public class VectorCheckedTextView extends AppCompatCheckedTextView {
                     db = AppCompatResources.getDrawable(context, dbId);
             }
 
-            isTintDrawableInTextColor = a.getBoolean(R.styleable.VectorCompatTextView_tintDrawableInTextColor, false);
-            mDrawableCompatColor = a.getColor(R.styleable.VectorCompatTextView_drawableCompatColor, 0);
-            isDrawableAdjustTextWidth = a.getBoolean(R.styleable.VectorCompatTextView_drawableAdjustTextWidth, false);
-            isDrawableAdjustTextHeight = a.getBoolean(R.styleable.VectorCompatTextView_drawableAdjustTextHeight, false);
-            mDrawableWidth = a.getDimensionPixelSize(R.styleable.VectorCompatTextView_drawableWidth, 0);
-            mDrawableHeight = a.getDimensionPixelSize(R.styleable.VectorCompatTextView_drawableHeight, 0);
+            isTintDrawableInTextColor = a.getBoolean(R.styleable.VectorCheckedTextView_tintDrawableInTextColor, false);
+            mDrawableCompatColor = a.getColor(R.styleable.VectorCheckedTextView_drawableCompatColor, 0);
+            isDrawableAdjustTextWidth = a.getBoolean(R.styleable.VectorCheckedTextView_drawableAdjustTextWidth, false);
+            isDrawableAdjustTextHeight = a.getBoolean(R.styleable.VectorCheckedTextView_drawableAdjustTextHeight, false);
+            mDrawableWidth = a.getDimensionPixelSize(R.styleable.VectorCheckedTextView_drawableWidth, 0);
+            mDrawableHeight = a.getDimensionPixelSize(R.styleable.VectorCheckedTextView_drawableHeight, 0);
             a.recycle();
 
             if (mDrawableWidth < 0)
