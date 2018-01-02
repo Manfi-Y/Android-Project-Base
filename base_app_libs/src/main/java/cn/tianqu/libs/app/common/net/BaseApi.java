@@ -253,7 +253,7 @@ public class BaseApi {
 
     public Task download(Context context, String url, File downloadPath, final SimpleDownloadCallback callback) {
         LogUtil.d(DEBUG, TAG, "下载开始：" + url);
-        final RequestHandle rh = MyAsyncHttpClient.get(context, url, null, null, new FileAsyncHttpResponseHandler(downloadPath, true) {
+        final RequestHandle rh = MyAsyncHttpClient.get(context, url, null, null, new FileAsyncHttpResponseHandler(downloadPath, false) {
 
             @Override
             public void onStart() {

@@ -14,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 34
-        versionName '1.2.13'
+        versionCode 35
+        versionName '1.2.14'
 
         /*javaCompileOptions {
             annotationProcessorOptions {
