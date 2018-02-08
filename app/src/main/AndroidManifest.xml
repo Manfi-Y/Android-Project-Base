@@ -16,14 +16,14 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity android:name=".MainActivity_">
-
-        </activity>
-        <activity android:name=".NetActivity_">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".NetActivity_">
+
         </activity>
     </application>
 
