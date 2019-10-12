@@ -17,7 +17,7 @@ buildscript {
 //        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
         // 上传到JitPack所需的插件
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
